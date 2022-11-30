@@ -2,12 +2,19 @@ package Assigtnment3PLC22WS
 
 import Assigtnment3PLC22WS.Database
 
+
 object MainApp {
   def main(args: Array[String]): Unit = {
 
-    val scr = CSVReader.readCSV(args.head).toArray
-    val db: Database = new Database(scr)
+    val db: Database = new Database()
+    val scr: List[StoreItem] = CSVReader.readCSV("data.csv")
+    scr.foreach(item => db.store(item))
+
+    println("- - - SUM UP - - -")
     println(db.sumUp())
+    println("- - - FILTERED BY ASUS - - -")
+    var searched: Array[StoreItem] = db.findByName("ASUS")
+    searched.foreach(item => println(item.getName()))
   }
 }
 
@@ -17,9 +24,8 @@ object CSVReader {
     val bufferedSource = io.Source.fromFile(filename)
     for(line <- bufferedSource.getLines.drop(1)) {
       val cols = line.split(",").map(_.trim)
-      val item = new StoreItem(cols(2).toInt, cols(4).toString, cols(5).toInt)
+      val item = new StoreItem(cols(0).toInt, cols(1), cols(2).toInt)
       items = items :+ item
-      println(cols(2))
     }
     bufferedSource.close
     items
