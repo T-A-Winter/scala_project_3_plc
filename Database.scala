@@ -7,7 +7,9 @@ class Database () extends ShoppingCart {
 
   def getStoredItems() :Array[StoreItem] = storedItems
 
-  override def delete(id: Int): Array[StoreItem] = ???
+  override def delete(id: Int): Array[StoreItem] = {
+    ???
+  }
 
   override def search(name: String): Array[StoreItem] = {
     val searchedItem: Array[StoreItem] =
@@ -20,9 +22,10 @@ class Database () extends ShoppingCart {
     searchedItem
   }
 
-  def findByName(name:String ): Array[StoreItem] = {
-    sortByValueAsc()
-    search(name)
+  def findByName(name:String, list: Array[StoreItem]): Array[StoreItem] = {
+    val searchedItem: Array[StoreItem] =
+      list.filter(item => item.getName().contains(name))
+    searchedItem.sortBy(_.getValue())
   }
 
   override def sortByValueAsc(): Array[StoreItem] = {
