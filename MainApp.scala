@@ -27,6 +27,10 @@ object MainApp {
     println("--- SORTED ITEMS ---")
     var sordetList: Array[StoreItem] = db.sortByValueDesc()
     sordetList.foreach(item => println(item.getName() +" "+ item.getValue()))
+    println("--- HIGHER THAN ---")
+    db.higherThan(100)
+    println("--- FILTER BY NAME ---")
+    db.filterByName("Lenovo", db.getStoredItems)
 
   }
 }

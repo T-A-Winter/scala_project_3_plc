@@ -3,21 +3,31 @@ package Assigtnment3PLC22WS
 class Database () extends ShoppingCart {
 
   private var storedItems = Array[StoreItem]()
+  def getStoredItems: Array[StoreItem] = storedItems
 
-
-  def getStoredItems() :Array[StoreItem] = storedItems
+  //def getStoredItems() :Array[StoreItem] = storedItems
   //exam example
   def higherThan(value :Int) : Array[StoreItem] = {
-    val filteredItems = storedItems.filter(_.getValue() > value)
-    val sortedItems = filteredItems.sortBy(_.getValue())
-    sortedItems.map(i => i.logAction(s"higherThan call", i.getName()))
-    sortedItems
+    def doForEach(f: StoreItem => Unit, items: Array[StoreItem]): Array[StoreItem] = {
+      for (el <- items) f(el)
+      items
+    }
+    val res = storedItems
+      .filter(_.getValue() > value)
+      .sortBy(_.getValue())
+    doForEach(el => el.logAction("found", el.getName()), res)
   }
 
   //exam example
   def filterByName(name: String, items: Array[StoreItem]): Array[StoreItem] = {
-    val filterdItems = items.filter(_.getName() == name)
-    filterdItems
+    def doForEach(f: StoreItem => Unit, items: Array[StoreItem]): Array[StoreItem] = {
+      for (item <- items) f(item)
+      items
+    }
+    val filterdItems = items
+      .filter(_.getName().contains(name))
+      .sortBy(_.getValue())
+    doForEach(el => el.logAction("found", el.getName()), filterdItems)
   }
 
   override def delete(id: Int): Array[StoreItem] = {
