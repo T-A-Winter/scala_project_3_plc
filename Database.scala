@@ -6,16 +6,40 @@ class Database () extends ShoppingCart {
 
 
   def getStoredItems() :Array[StoreItem] = storedItems
+  //exam example
+  def higherThan(value :Int) : Array[StoreItem] = {
+    val filteredItems = storedItems.filter(_.getValue() > value)
+    val sortedItems = filteredItems.sortBy(_.getValue())
+    sortedItems.map(i => i.logAction(s"higherThan call", i.getName()))
+    sortedItems
+  }
+
+  //exam example
+  def filterByName(name: String, items: Array[StoreItem]): Array[StoreItem] = {
+    val filterdItems = items.filter(_.getName() == name)
+    filterdItems
+  }
 
   override def delete(id: Int): Array[StoreItem] = {
-    ???
+    var found:Boolean = false
+    storedItems.foreach(item => {
+      if(item.getId() == id){
+        found = true
+        item.logAction(s"delete", item.getId().toString)
+      }
+    })
+    if(!found){
+      println("delete: item not found")
+    }
+    storedItems = storedItems.filter(item => item.getId() != id)
+    storedItems
   }
 
   override def search(name: String): Array[StoreItem] = {
     val searchedItem: Array[StoreItem] =
       storedItems.filter(item => item.getName().contains(name))
 
-    searchedItem.foreach(item => item.logAction("found", item.getName()))
+    searchedItem.map(item => item.logAction("found", item.getName()))
 
     if (searchedItem.length <= 0)
       println(s"$name : not found")
@@ -29,11 +53,11 @@ class Database () extends ShoppingCart {
   }
 
   override def sortByValueAsc(): Array[StoreItem] = {
-    storedItems.sorted
+    storedItems.sortWith((item1, item2) => item1.getValue() <= item2.getValue())
   }
 
   override def sortByValueDesc(): Array[StoreItem] = {
-    storedItems.sorted.reverse
+    storedItems.sortWith((item1, item2) => item1.getValue() <= item2.getValue()).reverse
   }
 
   override def store(item: StoreItem): Array[StoreItem] = {

@@ -27,6 +27,7 @@ object MainApp {
     println("--- SORTED ITEMS ---")
     var sordetList: Array[StoreItem] = db.sortByValueDesc()
     sordetList.foreach(item => println(item.getName() +" "+ item.getValue()))
+
   }
 }
 
